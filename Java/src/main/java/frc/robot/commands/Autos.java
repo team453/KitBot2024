@@ -23,6 +23,21 @@ public final class Autos {
         .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0)));
   }
 
+  public static Command dangerAuto(CANDrivetrain drivetrain) {
+   
+     return new RunCommand(() -> drivetrain.arcadeDrive(0, 1)) // 0 forward speed, maximum turning speed
+        .withTimeout(10) // run for 10 seconds
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0))); 
+  }
+
+  public static Command driveforwardAuto(CANDrivetrain drivetrain) {
+   
+     return new RunCommand(() -> drivetrain.arcadeDrive(0.75, 0)) // 0 forward speed, maximum turning speed
+        .withTimeout(1) // run for 1 seconds
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0))); 
+  }
+
+
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }

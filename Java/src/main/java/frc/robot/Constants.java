@@ -50,4 +50,11 @@ public final class Constants {
 
     public static final double kLauncherDelay = 1;
   }
+
+  public static class AutonomousTypes
+  {
+      public static final String kDefaultAuto = "Default";
+      public static final String kDriveForwardAuto = "Drive Forward";
+      public static final String kDangerAuto = "DANGEROUS MODE!!";
+  }
 }
