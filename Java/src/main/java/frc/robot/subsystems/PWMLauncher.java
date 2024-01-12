@@ -16,8 +16,8 @@ public class PWMLauncher extends SubsystemBase {
 
   /** Creates a new Launcher. */
   public PWMLauncher() {
-    m_launchWheel = new PWMSparkMax(kLauncherID);
-    m_feedWheel = new PWMSparkMax(kFeederID);
+   // m_launchWheel = new PWMSparkMax(kLauncherID);
+   // m_feedWheel = new PWMSparkMax(kFeederID);
   }
 
   /**
