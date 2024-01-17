@@ -49,6 +49,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(String type) {
+    return Autos.exampleAuto(m_drivetrain);
+    /* 
     if(type == kDefaultAuto)
     {
 return Autos.exampleAuto(m_drivetrain);
@@ -67,6 +69,7 @@ return Autos.exampleAuto(m_drivetrain);
     //send out an error
     System.out.println("AUTO NOT DEFINED OF TYPE: " + type);
     return null;
+    */
   }
 
 

@@ -16,27 +16,30 @@ public final class Autos {
      * RunCommand is a helper class that creates a command from a single method, in this case we
      * pass it the arcadeDrive method to drive straight back at half power. We modify that command
      * with the .withTimeout(1) decorator to timeout after 1 second, and use the .andThen decorator
-     * to stop the drivetrain after the first command times out
+         * to stop the drivetrain after the first command times out
      */
     return new RunCommand(() -> drivetrain.arcadeDrive(-.5, 0))
-        .withTimeout(1)
-        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0)));
+        .withTimeout(5)
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0)))
+        .withTimeout(1) // run for 10 seconds
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0.5)))
+         .withTimeout(2) // run for 10 seconds
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0))); 
   }
 
   public static Command dangerAuto(CANDrivetrain drivetrain) {
-   
-     return new RunCommand(() -> drivetrain.arcadeDrive(0, 1)) // 0 forward speed, maximum turning speed
+
+     return new RunCommand(() -> drivetrain.arcadeDrive(0, 0.5)) // 0 forward speed, maximum turning speed
         .withTimeout(10) // run for 10 seconds
         .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0))); 
   }
 
   public static Command driveforwardAuto(CANDrivetrain drivetrain) {
-   
-     return new RunCommand(() -> drivetrain.arcadeDrive(0.75, 0)) // 0 forward speed, maximum turning speed
-        .withTimeout(1) // run for 1 seconds
+
+     return new RunCommand(() -> drivetrain.arcadeDrive(0.5, 0)) // 0 forward speed, maximum turning speed
+        .withTimeout(5) // run for 5 seconds
         .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0))); 
   }
-
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
