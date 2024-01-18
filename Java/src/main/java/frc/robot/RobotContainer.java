@@ -4,6 +4,9 @@ import static frc.robot.Constants.AutonomousTypes.kDangerAuto;
 import static frc.robot.Constants.AutonomousTypes.kDefaultAuto;
 import static frc.robot.Constants.AutonomousTypes.kDriveForwardAuto;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +18,7 @@ import frc.robot.subsystems.CANDrivetrain;
 
 public class RobotContainer {
   private final CANDrivetrain m_drivetrain = new CANDrivetrain();
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
   //private final CANLauncher m_launcher = new CANLauncher();
 
   // Assuming these port numbers are correct for your setup.
@@ -23,6 +27,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureBindings();
+    populateAutoCommands();
   }
   
   private void configureBindings() {
@@ -47,30 +52,27 @@ public class RobotContainer {
     m_operatorController.leftBumper().whileTrue(m_launcher.getIntakeCommand());
     */
   }
-
-  public Command getAutonomousCommand(String type) {
-    return Autos.exampleAuto(m_drivetrain);
-    /* 
-    if(type == kDefaultAuto)
-    {
-return Autos.exampleAuto(m_drivetrain);
+ private void populateAutoCommands() {
+        Method[] methods = Autos.class.getDeclaredMethods();
+        Arrays.stream(methods)
+              .filter(method -> Command.class.isAssignableFrom(method.getReturnType()) && method.getParameterCount() == 1)
+              .forEach(method -> {
+                  try {
+                      Command command = (Command) method.invoke(null, m_drivetrain);
+                      autoChooser.addOption(method.getName(), command);
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                  }
+              });
+        SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
-    else if(type == kDriveForwardAuto)
-    {
-      return Autos.driveforwardAuto(m_drivetrain);
+    public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
     }
 
-    else if(type == kDangerAuto)
-    {
-       return Autos.dangerAuto(m_drivetrain);
-    }
-
-    //send out an error
-    System.out.println("AUTO NOT DEFINED OF TYPE: " + type);
-    return null;
-    */
+    public String getSelectedAutoName() {
+      return autoChooser.getSelected().getName();
   }
-
 
 }

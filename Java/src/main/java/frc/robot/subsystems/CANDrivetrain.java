@@ -9,6 +9,8 @@ import static frc.robot.Constants.DrivetrainConstants.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /* This class declares the subsystem for the robot drivetrain if controllers are connected via CAN. Make sure to go to
@@ -63,4 +65,17 @@ public class CANDrivetrain extends SubsystemBase {
     /*This method will be called once per scheduler run. It can be used for running tasks we know we want to update each
      * loop such as processing sensor data. Our drivetrain is simple so we don't have anything to put here */
   }
+
+   /**
+     * Creates a command to drive the robot in arcade mode for a specified duration.
+     *
+     * @param speed The speed at which to drive the robot.
+     * @param rotation The rotation rate for the robot.
+     * @param timeout The duration for which the command should run.
+     * @return A new command that drives the robot in arcade mode for the specified duration.
+     */
+    public Command createArcadeDriveCommand(double speed, double rotation, double timeout) {
+        return new RunCommand(() -> this.arcadeDrive(speed, rotation), this)
+                .withTimeout(timeout);
+    }
 }

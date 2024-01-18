@@ -10,14 +10,27 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.subsystems.CANDrivetrain;
 
 public final class Autos {
-  /** Example static factory for an autonomous command. */
+  public static Command exampleRequirementAuto(CANDrivetrain drivetrain) {
+    return new RunCommand(() -> drivetrain.arcadeDrive(-.5, 0), drivetrain).withTimeout(5)
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0), drivetrain).withTimeout(1))
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0.5), drivetrain).withTimeout(2))
+        .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0), drivetrain)); 
+  }
+
+  public static Command exampleFactoryAuto(CANDrivetrain drivetrain) {
+    return drivetrain.createArcadeDriveCommand(-.5, 0, 5)
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1))
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0.5, 2))
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1)); 
+  }
+  private Autos() {
+    throw new UnsupportedOperationException("This is a utility class!");
+  }
+}
+/*
+ *
   public static Command exampleAuto(CANDrivetrain drivetrain) {
-    /**
-     * RunCommand is a helper class that creates a command from a single method, in this case we
-     * pass it the arcadeDrive method to drive straight back at half power. We modify that command
-     * with the .withTimeout(1) decorator to timeout after 1 second, and use the .andThen decorator
-         * to stop the drivetrain after the first command times out
-     */
+   
     return new RunCommand(() -> drivetrain.arcadeDrive(-.5, 0))
         .withTimeout(5)
         .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0)))
@@ -40,8 +53,4 @@ public final class Autos {
         .withTimeout(5) // run for 5 seconds
         .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0))); 
   }
-
-  private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
-  }
-}
+ */
