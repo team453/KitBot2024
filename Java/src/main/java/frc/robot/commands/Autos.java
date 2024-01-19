@@ -23,6 +23,17 @@ public final class Autos {
             .andThen(drivetrain.createArcadeDriveCommand(0, 0.5, 2))
             .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1)); 
   }
+
+   public static Command ourFirstAuto(CANDrivetrain drivetrain) {
+    return drivetrain.createArcadeDriveCommand(-.5, 0, 1)
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1))
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0.5,3))
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0,1))
+            .andThen(drivetrain.createArcadeDriveCommand(0.4, 0,1))
+            .andThen(drivetrain.createArcadeDriveCommand(-0.45, 0.45, 4))
+             .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1)); 
+             
+  }
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
