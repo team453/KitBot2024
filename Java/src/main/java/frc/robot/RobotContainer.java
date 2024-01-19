@@ -22,8 +22,8 @@ public class RobotContainer {
   //private final CANLauncher m_launcher = new CANLauncher();
 
   // Assuming these port numbers are correct for your setup.
-  private final Joystick m_driver = new Joystick(0);
-  private final Joystick m_operator = new Joystick(1);
+  private final Joystick m_driver = new Joystick(Constants.OperatorConstants.kDriverControllerPort);
+  private final Joystick m_operator = new Joystick(Constants.OperatorConstants.kOperatorControllerPort);
 
   public RobotContainer() {
     configureBindings();
@@ -35,8 +35,8 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 m_drivetrain.arcadeDrive(
-                    -m_driver.getY(), // Assuming getY() and getX() are correct methods
-                    -m_driver.getX()),
+                    -m_driver.getY()*Constants.OperatorConstants.kDriverSpeedMultiplier, // Assuming getY() and getX() are correct methods
+                    -m_driver.getX()*Constants.OperatorConstants.kDriverSpeedMultiplier),
             m_drivetrain));
 
     // Commenting out the following as m_operatorController is not defined

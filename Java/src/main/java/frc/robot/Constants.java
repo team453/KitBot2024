@@ -18,6 +18,9 @@ public final class Constants {
     // tab of the DriverStation
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
+
+    //Speed multipliers/ limits
+    public static final double kDriverSpeedMultiplier = 0.60;
   }
 
   public static class DrivetrainConstants {
@@ -30,6 +33,8 @@ public final class Constants {
     // Current limit for drivetrain motors
 
     public static final int kCurrentLimit = 60;
+
+
   }
 
   public static class LauncherConstants {

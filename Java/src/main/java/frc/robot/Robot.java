@@ -22,9 +22,7 @@ import java.io.Console;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
- private String m_autoSelected;
 
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -35,10 +33,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-      m_chooser.addOption("Drive Forward", kDriveForwardAuto);
-    m_chooser.addOption("Dangerous Mode", kDangerAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
   }
 
   /**
