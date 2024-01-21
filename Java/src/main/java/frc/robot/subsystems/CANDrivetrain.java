@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * that hardware is only being used by 1 command at a time.
  */
 public class CANDrivetrain extends SubsystemBase {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   /*Class member variables. These variables represent things the class needs to keep track of and use between
   different method calls. */
   DifferentialDrive m_drivetrain;
@@ -78,4 +79,8 @@ public class CANDrivetrain extends SubsystemBase {
         return new RunCommand(() -> this.arcadeDrive(speed, rotation), this)
                 .withTimeout(timeout);
     }
+
+    public void stop() {
+      m_drivetrain.arcadeDrive(0, 0); // Stop the robot by setting speed and rotation to zero
+  }
 }
