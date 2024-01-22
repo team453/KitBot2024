@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.helpers.LimelightHelpers;
 
 public class LimeLight extends SubsystemBase {
 
@@ -11,6 +14,8 @@ public class LimeLight extends SubsystemBase {
     public double ty;
     public double tv;
     public double ta;
+    private final Field2d m_field = new Field2d();
+
 
     public LimeLight(){
         //setup for calibration
@@ -22,8 +27,6 @@ public class LimeLight extends SubsystemBase {
     }
 
     public void updateLimeLightTracking() {
-        final double TARGET = 13.0;
-
          tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
          tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
          ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
@@ -43,5 +46,21 @@ public class LimeLight extends SubsystemBase {
         SmartDashboard.putNumber("LimeLight TY", ty);
         SmartDashboard.putNumber("LimeLight TA", ta);
         SmartDashboard.putBoolean("Target Aquired", m_ValidTarget);
+
+
+        //post estimated field postion to smart dashboard
+        Pose2d robotPose = LimelightHelpers.getBotPose2d("limelight");
+        // Update Smart Dashboard with robot position
+        SmartDashboard.putNumber("Robot X", robotPose.getX());
+        SmartDashboard.putNumber("Robot Y", robotPose.getY());
+        SmartDashboard.putNumber("Robot Orientation", robotPose.getRotation().getDegrees());
+
+        //Post position to field map
+        
+        // Do this in either robot or subsystem init
+        SmartDashboard.putData("Field", m_field);
+
+        // Do this in either robot periodic or subsystem periodic
+        m_field.setRobotPose(robotPose);
     }
 }
