@@ -19,6 +19,7 @@ public class LimeLight extends SubsystemBase {
 
     public LimeLight(){
         //setup for calibration
+        SmartDashboard.putData("Field", m_field);
     }
 
     @Override
@@ -56,11 +57,6 @@ public class LimeLight extends SubsystemBase {
         SmartDashboard.putNumber("Robot Orientation", robotPose.getRotation().getDegrees());
 
         //Post position to field map
-        
-        // Do this in either robot or subsystem init
-        SmartDashboard.putData("Field", m_field);
-
-        // Do this in either robot periodic or subsystem periodic
         m_field.setRobotPose(robotPose);
     }
 }

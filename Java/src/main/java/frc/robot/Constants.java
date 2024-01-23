@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -17,7 +13,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  
   public static class OIConstants {
     // Port numbers for driver and operator gamepads. These correspond with the numbers on the USB
     // tab of the DriverStation
