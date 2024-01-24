@@ -29,6 +29,8 @@ public class AlignWithTag extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        
+    System.out.println("Executing Align CMD");
             limelight.updateLimeLightTracking();
             double heading_error = -limelight.tx;
             System.out.println("Executing with error " + heading_error);

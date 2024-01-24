@@ -1,5 +1,7 @@
 package frc.robot.commands.LimeLightVision;
 
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.Constants.DrivetrainConstants;
@@ -32,29 +34,40 @@ public class MoveWithTag extends Command{
   
     // Called every time the scheduler runs while the command is scheduled.
     @Override
-public void execute() {
-    // Check if there's a valid target
-    if (!m_LimeLight.m_ValidTarget) {
-        return; // No valid target, do nothing
+    public void execute() {
+        // Check if there's a valid target
+        if (!m_LimeLight.m_ValidTarget) {
+            return; // No valid target, do nothing
+        }
+    
+        double turnAdjust = 0.0;
+        double moveAdjust = 0.0;
+        double desiredTa = 1; /* set the desired 'ta' value that corresponds to 3 feet distance */;
+    
+        // Proportional control for turning
+        if (m_LimeLight.tx > 0) {
+            // Robot needs to turn right
+            turnAdjust = -DrivetrainConstants.k_AutoCorrectTurn;
+        } else if (m_LimeLight.tx < 0) {
+            // Robot needs to turn left
+            turnAdjust = DrivetrainConstants.k_AutoCorrectTurn;
+        }
+    
+        // Proportional control for moving
+        if (m_LimeLight.ta < desiredTa) {
+            // Robot is too far, needs to move forward
+            moveAdjust = DrivetrainConstants.k_AutoCorrectSpeed;
+        } else if (m_LimeLight.ta > desiredTa) {
+            // Robot is too close, needs to move backward
+            moveAdjust = -DrivetrainConstants.k_AutoCorrectSpeed;
+        }
+    
+        // Command the drivetrain to adjust position and orientation
+        SmartDashboard.putNumber("move", moveAdjust);
+        SmartDashboard.putNumber("turn", turnAdjust);
+        m_Drivetrain.arcadeDrive(moveAdjust, turnAdjust);
     }
-
-    // Calculate the necessary adjustments for alignment
-    double turnAdjust = 0.0;
-    double moveAdjust = 0.0;
-
-    // Determine turn direction based on horizontal offset (tx)
-    if (Math.abs(m_LimeLight.tx) > DrivetrainConstants.k_AutoCorrectTurn) {
-        turnAdjust = m_LimeLight.tx > 0 ? -DrivetrainConstants.k_AutoCorrectSpeed : DrivetrainConstants.k_AutoCorrectSpeed;
-    }
-
-    // Determine move direction based on target area (ta)
-    if (Math.abs(m_LimeLight.ta - DrivetrainConstants.k_AutoCorrectDist) > 0.1) {
-        moveAdjust = m_LimeLight.ta > DrivetrainConstants.k_AutoCorrectDist ? -DrivetrainConstants.k_AutoCorrectSpeed : DrivetrainConstants.k_AutoCorrectSpeed;
-    }
-
-    // Command the drivetrain to adjust position and orientation
-    m_Drivetrain.arcadeDrive(moveAdjust, turnAdjust);
-}
+    
 
   
     // Called once the command ends or is interrupted.

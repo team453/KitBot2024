@@ -40,9 +40,9 @@ public final class Constants {
     public static final int kCurrentLimit = 60;
 
     //Auto correction constants
-     public static final double k_AutoCorrectSpeed = 0.25;
-    public static final double k_AutoCorrectDist = 1.0;
-    public static final double k_AutoCorrectTurn = 0.1;
+     public static final double k_AutoCorrectSpeed = 0.5;
+   // public static final double k_AutoCorrectDist = 0.3;
+    public static final double k_AutoCorrectTurn = 0.5;
 
   }
    
