@@ -22,10 +22,14 @@ public final class Constants {
     //Speed multipliers/ limits
     public static final double kDriverSpeedMultiplier = 0.60;
 
-    //Button Mappings
+    //Driver Button Mappings
+    public static final int kDriverSpeedButton = 1;
+
+    //Operator Button Mappings
     public static final int kIntakeButton = 1;
     public static final int kHighSpeedShootButton = 8;
     public static final int kLowSpeedShootButton  = 10;
+    public static final int kOperatorControlledShootButton = 12;
   }
 
   public static class DrivetrainConstants {
@@ -53,20 +57,18 @@ public final class Constants {
     public static final int kLauncherCurrentLimit = 80;
     public static final int kFeedCurrentLimit = 80;
 
-    // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
-    // in reverse
-    public static final double kLauncherSpeed = -1;
-    public static final double kLaunchFeederSpeed = -1;
+    // Speeds for wheels when intaking and launching. 
+    // Launch speeds are negative to run the wheels in reverse
+    public static final double kHighLauncherSpeed = -1;
+    public static final double kHighLaunchFeederSpeed = -1;
+    public static final double kLowLauncherSpeed = -0.13;
+    public static final double kLowLaunchFeederSpeed = -0.3;
+
     public static final double kIntakeLauncherSpeed = 1;
     public static final double kIntakeFeederSpeed = .2;
 
     public static final double kLauncherDelay = 0.5;
   }
 
-  public static class AutonomousTypes
-  {
-      public static final String kDefaultAuto = "Default";
-      public static final String kDriveForwardAuto = "Drive Forward";
-      public static final String kDangerAuto = "DANGEROUS MODE!!";
-  }
+ 
 }

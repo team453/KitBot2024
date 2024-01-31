@@ -9,9 +9,17 @@
 - **Right Front Motor**: ID `10`
 
 ## Button Mappings
+
+### Driver Controller
+- **Use Driver Set Speed Button**: ID `1` (Trigger)
+Speed is set with axis 4.
+
+### Operator Controller
 - **Intake Button**: ID `1` (Trigger)
 - **High Speed Shoot Button**: ID `8`
 - **Low Speed Shoot Button**: ID `10`
+- **Operator Set Speed Shoot Button**: ID `12`
+Speed is set with axis 4.
 
 
 

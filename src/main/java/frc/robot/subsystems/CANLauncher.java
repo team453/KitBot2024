@@ -50,8 +50,8 @@ public class CANLauncher extends SubsystemBase {
   public Command getLaunchCommand(){
     return this.startEnd(
       () -> {
-        setFeedWheel(kLauncherSpeed);
-        setLaunchWheel(kLaunchFeederSpeed);
+        setFeedWheel(kHighLauncherSpeed);
+        setLaunchWheel(kHighLaunchFeederSpeed);
       },
       () -> {
         stop();

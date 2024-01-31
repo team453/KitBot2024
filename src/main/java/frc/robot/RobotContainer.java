@@ -1,14 +1,19 @@
 package frc.robot;
 
-import static frc.robot.Constants.AutonomousTypes.kDangerAuto;
-import static frc.robot.Constants.AutonomousTypes.kDefaultAuto;
-import static frc.robot.Constants.AutonomousTypes.kDriveForwardAuto;
+import static frc.robot.Constants.LauncherConstants.kHighLaunchFeederSpeed;
+import static frc.robot.Constants.LauncherConstants.kHighLauncherSpeed;
+import static frc.robot.Constants.LauncherConstants.kLowLaunchFeederSpeed;
+import static frc.robot.Constants.LauncherConstants.kLowLauncherSpeed;
+
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,19 +31,24 @@ import frc.robot.Constants.OperatorConstants;
 //import frc.robot.subsystems.CANLauncher;
 
 public class RobotContainer {
+    // Subsystems
   private final CANDrivetrain m_drivetrain = new CANDrivetrain();
   private final CANLauncher m_launcher = new CANLauncher();
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
-  //private final CANLauncher m_launcher = new CANLauncher();
 
-  // Assuming these port numbers are correct for your setup.
+  // Controllers
   private final Joystick m_driver = new Joystick(OperatorConstants.kDriverControllerPort);
   private final Joystick m_operator = new Joystick(OperatorConstants.kOperatorControllerPort);
    
+//Shuffleboard
+    private  double operatorLauncherSpeed = 0;
+    private  double driverDriveSpeed = 0;
 
   public RobotContainer() {
     configureBindings();
     populateAutoCommands();
+    updateSpeeds();
+    setupShuffleboard();
   }
   
   private void configureBindings() {
@@ -47,30 +57,50 @@ public class RobotContainer {
             () ->
                 m_drivetrain.arcadeDrive(
                     -m_driver.getY()*Constants.OperatorConstants.kDriverSpeedMultiplier,
-                    -m_driver.getX()*Constants.OperatorConstants.kDriverSpeedMultiplier),
+                    -m_driver.getTwist()*Constants.OperatorConstants.kDriverSpeedMultiplier),
             m_drivetrain));
 
-   /*Create an inline sequence to run when the operator presses and holds the 9 button. Run the PrepareLaunch
+    //When holding the trigger, use the driverDriveSpeed
+    new JoystickButton(m_driver, OperatorConstants.kDriverSpeedButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    .whileTrue(
+        new RunCommand(
+            () ->
+                m_drivetrain.arcadeDrive(
+                    -m_driver.getY()*driverDriveSpeed,
+                    -m_driver.getTwist()*driverDriveSpeed),
+            m_drivetrain));
+
+   /*Create an inline sequence to run when the operator presses and holds the appropriate button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */
-    new JoystickButton(m_driver, OperatorConstants.kHighSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    new JoystickButton(m_operator, OperatorConstants.kHighSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
     .whileTrue(
-        new PrepareLaunch(m_launcher) // Start with preparing the launch
+        new PrepareLaunch(m_launcher, kHighLauncherSpeed) // Start with preparing the launch
             .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
-            .andThen(new LaunchNote(m_launcher, -1, -1)) // Follow up with launching the note
+            .andThen(new LaunchNote(m_launcher, kHighLauncherSpeed, kHighLaunchFeederSpeed)) // Follow up with launching the note
             .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
 
-    new JoystickButton(m_driver, OperatorConstants.kLowSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    new JoystickButton(m_operator, OperatorConstants.kLowSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
     .whileTrue(
-        new PrepareLaunch(m_launcher) // Start with preparing the launch
+        new PrepareLaunch(m_launcher,kLowLauncherSpeed) // Start with preparing the launch
             .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
-            .andThen(new LaunchNote(m_launcher, -0.13, -0.3)) // Follow up with launching the note
+            .andThen(new LaunchNote(m_launcher, kLowLauncherSpeed, kLowLaunchFeederSpeed)) // Follow up with launching the note
             .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
-//  .andThen(new LaunchNote(m_launcher, -0.15, -0.3))
-    new JoystickButton(m_driver, OperatorConstants.kIntakeButton) // Binding for button 10 on m_operatorController joystick
-    .whileTrue(m_launcher.getIntakeCommand()); // Bind the intake command to be executed while button 10 is held
 
+    //Launch with preset speeds
+     new JoystickButton(m_operator, OperatorConstants.kOperatorControlledShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    .whileTrue(
+        new PrepareLaunch(m_launcher,operatorLauncherSpeed) // Start with preparing the launch
+            .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
+            .andThen(new LaunchNote(m_launcher, operatorLauncherSpeed, operatorLauncherSpeed)) // Follow up with launching the note
+            .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
+
+
+    new JoystickButton(m_operator, OperatorConstants.kIntakeButton) // Binding for trigger on m_operatorController joystick
+    .whileTrue(m_launcher.getIntakeCommand()); // Bind the intake command to be executed while trigger is held
 
   }
+
+
  private void populateAutoCommands() {
         Method[] methods = Autos.class.getDeclaredMethods();
         Arrays.stream(methods)
@@ -94,4 +124,28 @@ public class RobotContainer {
       return autoChooser.getSelected().getName();
   }
 
+  //user set launcher speed stuff
+  private void setupShuffleboard() {
+    ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
+
+    tab.addNumber("Operator Set Launcher Speed", () -> {
+        return Math.round(operatorLauncherSpeed* 1000.0) / 1000.0; // Round to 3 decimal places
+    });
+
+    tab.addNumber("Drive Speed Multiplier", () -> {
+        return Math.round(driverDriveSpeed * 1000.0) / 1000.0; // Round to 3 decimal places
+    });
+}
+
+private void updateSpeeds()
+{
+     operatorLauncherSpeed= m_operator.getRawAxis(4); // Get the value from axis 4
+     //value from 0 to 1 to act as a multiplier
+
+        driverDriveSpeed = map(m_driver.getRawAxis(4), -1.0, 1.0, 0.0, 1.0);
+}
+
+double map(double x, double in_min, double in_max, double out_min, double out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
 }
