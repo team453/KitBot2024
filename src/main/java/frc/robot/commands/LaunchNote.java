@@ -17,11 +17,16 @@ public class LaunchNote extends Command {
   // PWMLauncher m_launcher;
 
   CANLauncher m_launcher;
+  double launcherSpeed;
+  double launchFeederSpeed;
+
 
   /** Creates a new LaunchNote. */
-  public LaunchNote(CANLauncher launcher) {
+  public LaunchNote(CANLauncher launcher, double launcherSpeed, double launchFeederSpeed) {
     // save the launcher system internally
     m_launcher = launcher;
+    this.launchFeederSpeed = launchFeederSpeed;
+    this.launcherSpeed = launcherSpeed;
 
     // indicate that this command requires the launcher system
     addRequirements(m_launcher);
@@ -31,8 +36,8 @@ public class LaunchNote extends Command {
   @Override
   public void initialize() {
     // Set the wheels to launching speed
-    m_launcher.setLaunchWheel(kLauncherSpeed);
-    m_launcher.setFeedWheel(kLaunchFeederSpeed);
+    m_launcher.setLaunchWheel(launcherSpeed);
+    m_launcher.setFeedWheel(launchFeederSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

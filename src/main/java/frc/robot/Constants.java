@@ -21,6 +21,11 @@ public final class Constants {
 
     //Speed multipliers/ limits
     public static final double kDriverSpeedMultiplier = 0.60;
+
+    //Button Mappings
+    public static final int kIntakeButton = 1;
+    public static final int kHighSpeedShootButton = 8;
+    public static final int kLowSpeedShootButton  = 10;
   }
 
   public static class DrivetrainConstants {

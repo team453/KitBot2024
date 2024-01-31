@@ -22,6 +22,7 @@ import frc.robot.subsystems.CANDrivetrain;
 import frc.robot.subsystems.CANLauncher;
 import frc.robot.subsystems.PWMLauncher;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.OperatorConstants;
 //import frc.robot.subsystems.CANLauncher;
 
 public class RobotContainer {
@@ -31,8 +32,8 @@ public class RobotContainer {
   //private final CANLauncher m_launcher = new CANLauncher();
 
   // Assuming these port numbers are correct for your setup.
-  private final Joystick m_driver = new Joystick(Constants.OperatorConstants.kDriverControllerPort);
-  private final Joystick m_operator = new Joystick(Constants.OperatorConstants.kOperatorControllerPort);
+  private final Joystick m_driver = new Joystick(OperatorConstants.kDriverControllerPort);
+  private final Joystick m_operator = new Joystick(OperatorConstants.kOperatorControllerPort);
    
 
   public RobotContainer() {
@@ -51,15 +52,22 @@ public class RobotContainer {
 
    /*Create an inline sequence to run when the operator presses and holds the 9 button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */
-    new JoystickButton(m_driver, 12) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    new JoystickButton(m_driver, OperatorConstants.kHighSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
     .whileTrue(
         new PrepareLaunch(m_launcher) // Start with preparing the launch
             .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
-            .andThen(new LaunchNote(m_launcher)) // Follow up with launching the note
+            .andThen(new LaunchNote(m_launcher, -1, -1)) // Follow up with launching the note
             .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
 
-            new JoystickButton(m_driver, 10) // Binding for button 10 on m_operatorController joystick
-            .whileTrue(m_launcher.getIntakeCommand()); // Bind the intake command to be executed while button 10 is held
+    new JoystickButton(m_driver, OperatorConstants.kLowSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    .whileTrue(
+        new PrepareLaunch(m_launcher) // Start with preparing the launch
+            .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
+            .andThen(new LaunchNote(m_launcher, -0.13, -0.3)) // Follow up with launching the note
+            .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
+//  .andThen(new LaunchNote(m_launcher, -0.15, -0.3))
+    new JoystickButton(m_driver, OperatorConstants.kIntakeButton) // Binding for button 10 on m_operatorController joystick
+    .whileTrue(m_launcher.getIntakeCommand()); // Bind the intake command to be executed while button 10 is held
 
 
   }
