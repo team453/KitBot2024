@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import edu.wpi.first.math.util.Units;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -33,8 +33,10 @@ public final class Constants {
     // Current limit for drivetrain motors
 
     public static final int kCurrentLimit = 60;
-
-
+    public static final int kEncoderCPR = 1024;
+    public static final double kWheelDiameterMeters = Units.inchesToMeters(6);
+    public static final double kEncoderDistancePerPulse =
+      (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
   }
 
   public static class LauncherConstants {
@@ -48,12 +50,12 @@ public final class Constants {
 
     // Speeds for wheels when intaking and launching. Intake speeds are negative to run the wheels
     // in reverse
-    public static final double kLauncherSpeed = 1;
-    public static final double kLaunchFeederSpeed = 1;
-    public static final double kIntakeLauncherSpeed = -1;
-    public static final double kIntakeFeederSpeed = -.2;
+    public static final double kLauncherSpeed = -1;
+    public static final double kLaunchFeederSpeed = -1;
+    public static final double kIntakeLauncherSpeed = 1;
+    public static final double kIntakeFeederSpeed = .2;
 
-    public static final double kLauncherDelay = 1;
+    public static final double kLauncherDelay = 0.5;
   }
 
   public static class AutonomousTypes

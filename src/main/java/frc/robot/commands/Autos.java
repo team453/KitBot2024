@@ -34,6 +34,13 @@ public final class Autos {
              .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1)); 
              
   }
+  public static Command driveForwardCommand(CANDrivetrain drivetrain) {
+    return drivetrain.createArcadeDriveCommand(0.5, 0, 3) // Move forward with 50% speed for 3 seconds
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1)) // Optional stop for 1 second
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0.5, 3)) // Spin with 50% rotation speed for 3 seconds
+            .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1)); // Optional stop for 1 second
+}
+
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }

@@ -30,6 +30,7 @@ public class PWMLauncher extends SubsystemBase {
   public Command getIntakeCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
+    System.out.println("Launching");
     return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {

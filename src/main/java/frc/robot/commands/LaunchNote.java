@@ -40,7 +40,7 @@ public class LaunchNote extends Command {
   public void execute() {
     // There is nothing we need this command to do on each iteration. You could remove this method
     // and the default blank method
-    // of the base class will run.
+    // of the base cla-------------------------------------------------------------------ss will run.
   }
 
   // Returns true when the command should end.

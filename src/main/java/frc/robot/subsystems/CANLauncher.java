@@ -34,6 +34,7 @@ public class CANLauncher extends SubsystemBase {
   public Command getIntakeCommand() {
     // The startEnd helper method takes a method to call when the command is initialized and one to
     // call when it ends
+    System.out.println("Launching");
     return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {
@@ -44,6 +45,28 @@ public class CANLauncher extends SubsystemBase {
         () -> {
           stop();
         });
+  }
+
+  public Command getLaunchCommand(){
+    return this.startEnd(
+      () -> {
+        setFeedWheel(kLauncherSpeed);
+        setLaunchWheel(kLaunchFeederSpeed);
+      },
+      () -> {
+        stop();
+      }
+    );
+  }
+
+  public Command getIntakeFeedWheel(){
+    return this.startEnd(
+      () -> {
+        setFeedWheel(kIntakeFeederSpeed);
+      }, 
+      () -> {
+        stop();
+      });
   }
 
   // An accessor method to set the speed (technically the output percentage) of the launch wheel
