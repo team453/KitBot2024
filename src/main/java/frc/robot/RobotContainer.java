@@ -5,6 +5,9 @@ import static frc.robot.Constants.LauncherConstants.kHighLauncherSpeed;
 import static frc.robot.Constants.LauncherConstants.kLowLaunchFeederSpeed;
 import static frc.robot.Constants.LauncherConstants.kLowLauncherSpeed;
 
+import static frc.robot.Robot.OperatorLauncherSpeed;
+import static frc.robot.Robot.DriverDriveSpeed;
+
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.lang.reflect.Method;
@@ -40,15 +43,10 @@ public class RobotContainer {
   private final Joystick m_driver = new Joystick(OperatorConstants.kDriverControllerPort);
   private final Joystick m_operator = new Joystick(OperatorConstants.kOperatorControllerPort);
    
-//Shuffleboard
-    private  double operatorLauncherSpeed = 0;
-    private  double driverDriveSpeed = 0;
 
   public RobotContainer() {
     configureBindings();
     populateAutoCommands();
-    updateSpeeds();
-    setupShuffleboard();
   }
   
   private void configureBindings() {
@@ -66,8 +64,8 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 m_drivetrain.arcadeDrive(
-                    -m_driver.getY()*driverDriveSpeed,
-                    -m_driver.getTwist()*driverDriveSpeed),
+                    -m_driver.getY()*DriverDriveSpeed,
+                    -m_driver.getTwist()*DriverDriveSpeed),
             m_drivetrain));
 
    /*Create an inline sequence to run when the operator presses and holds the appropriate button. Run the PrepareLaunch
@@ -86,14 +84,14 @@ public class RobotContainer {
             .andThen(new LaunchNote(m_launcher, kLowLauncherSpeed, kLowLaunchFeederSpeed)) // Follow up with launching the note
             .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
 
-    //Launch with preset speeds
-     new JoystickButton(m_operator, OperatorConstants.kOperatorControlledShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
-    .whileTrue(
-        new PrepareLaunch(m_launcher,operatorLauncherSpeed) // Start with preparing the launch
-            .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
-            .andThen(new LaunchNote(m_launcher, operatorLauncherSpeed, operatorLauncherSpeed)) // Follow up with launching the note
-            .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
-
+   //Launch with set speeds
+new JoystickButton(m_operator, OperatorConstants.kOperatorControlledShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+.whileTrue(
+     new RunCommand(() -> SmartDashboard.putNumber("running speed", -1 * OperatorLauncherSpeed)) // Print the operator set speed
+    .andThen(new PrepareLaunch(m_launcher, -1 * OperatorLauncherSpeed) // Start with preparing the launch
+        .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
+        .andThen(new LaunchNote(m_launcher, -1 * OperatorLauncherSpeed, -1 * OperatorLauncherSpeed)) // Follow up with launching the note
+        .handleInterrupt(() -> m_launcher.stop()))); // Handle any interruption by stopping the launcher
 
     new JoystickButton(m_operator, OperatorConstants.kIntakeButton) // Binding for trigger on m_operatorController joystick
     .whileTrue(m_launcher.getIntakeCommand()); // Bind the intake command to be executed while trigger is held
@@ -124,28 +122,5 @@ public class RobotContainer {
       return autoChooser.getSelected().getName();
   }
 
-  //user set launcher speed stuff
-  private void setupShuffleboard() {
-    ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
-
-    tab.addNumber("Operator Set Launcher Speed", () -> {
-        return Math.round(operatorLauncherSpeed* 1000.0) / 1000.0; // Round to 3 decimal places
-    });
-
-    tab.addNumber("Drive Speed Multiplier", () -> {
-        return Math.round(driverDriveSpeed * 1000.0) / 1000.0; // Round to 3 decimal places
-    });
-}
-
-private void updateSpeeds()
-{
-     operatorLauncherSpeed= m_operator.getRawAxis(4); // Get the value from axis 4
-     //value from 0 to 1 to act as a multiplier
-
-        driverDriveSpeed = map(m_driver.getRawAxis(4), -1.0, 1.0, 0.0, 1.0);
-}
-
-double map(double x, double in_min, double in_max, double out_min, double out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-  }
+  
 }

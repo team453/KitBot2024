@@ -16,8 +16,8 @@ public final class Constants {
   public static class OperatorConstants {
     // Port numbers for driver and operator gamepads. These correspond with the numbers on the USB
     // tab of the DriverStation
-    public static final int kDriverControllerPort = 0;
-    public static final int kOperatorControllerPort = 1;
+    public static final int kDriverControllerPort = 1;
+    public static final int kOperatorControllerPort = 0;
 
     //Speed multipliers/ limits
     public static final double kDriverSpeedMultiplier = 0.60;
@@ -27,9 +27,9 @@ public final class Constants {
 
     //Operator Button Mappings
     public static final int kIntakeButton = 1;
-    public static final int kHighSpeedShootButton = 8;
-    public static final int kLowSpeedShootButton  = 10;
-    public static final int kOperatorControlledShootButton = 12;
+    public static final int kHighSpeedShootButton = 5;
+    public static final int kLowSpeedShootButton  = 6;
+    public static final int kOperatorControlledShootButton = 4;
   }
 
   public static class DrivetrainConstants {

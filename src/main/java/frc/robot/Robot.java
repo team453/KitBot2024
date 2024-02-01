@@ -4,11 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.OperatorConstants;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 import java.io.Console;
 
@@ -21,6 +27,16 @@ import java.io.Console;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+// Controllers
+  private final Joystick m_driver = new Joystick(OperatorConstants.kDriverControllerPort);
+  private final Joystick m_operator = new Joystick(OperatorConstants.kOperatorControllerPort);
+
+  public static double OperatorLauncherSpeed = 0;
+  public static double DriverDriveSpeed = 0;
+
+  private ShuffleboardTab tab;
+private NetworkTableEntry operatorSetLauncherSpeedEntry;
+private NetworkTableEntry driveSpeedMultiplierEntry;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,6 +64,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    updateSpeeds();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -88,7 +105,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+  }
 
   @Override
   public void testInit() {
@@ -107,4 +126,25 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  //user set launcher speed stuff
+private void updateSpeeds()
+{
+     OperatorLauncherSpeed= 1 -  map(m_operator.getRawAxis(3), -1.0, 1.0, 0.0, 1.0); // Get the value from axis 4
+     //value from 0 to 1 to act as a multiplier
+
+        //make it so top is max
+        DriverDriveSpeed = 1 - map(m_driver.getRawAxis(3), -1.0, 1.0, 0.0, 1.0);
+
+    SmartDashboard.putNumber("Operator Set Launcher Speed",
+        Math.round(OperatorLauncherSpeed * 1000.0) / 1000.0 // Round to 3 decimal places
+    );
+    SmartDashboard.putNumber("Drive Speed Multiplier",
+        Math.round(DriverDriveSpeed * 1000.0) / 1000.0 // Round to 3 decimal places
+    );
+}
+
+double map(double x, double in_min, double in_max, double out_min, double out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
 }
