@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 // import frc.robot.subsystems.PWMDrivetrain;
 import frc.robot.subsystems.CANDrivetrain;
+import frc.robot.subsystems.CANLauncher;
 
 public final class Autos {
   public static Command exampleRequirementAuto(CANDrivetrain drivetrain) {
@@ -40,6 +41,12 @@ public final class Autos {
             .andThen(drivetrain.createArcadeDriveCommand(0, 0.5, 3)) // Spin with 50% rotation speed for 3 seconds
             .andThen(drivetrain.createArcadeDriveCommand(0, 0, 1)); // Optional stop for 1 second
 }
+  public static Command firstAutonRoutine(CANDrivetrain drivetrain, CANLauncher launcher)
+  {
+    return drivetrain.createArcadeDriveCommand(.3, 0, 2)
+    .andThen(launcher.createLauncherCommand(0, .5, 2)
+    .andThen(drivetrain.createArcadeDriveCommand(0, 0.3, 2)));
+  }
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");

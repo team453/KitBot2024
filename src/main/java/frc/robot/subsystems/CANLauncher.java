@@ -9,6 +9,7 @@ import static frc.robot.Constants.LauncherConstants.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CANLauncher extends SubsystemBase {
@@ -78,6 +79,14 @@ public class CANLauncher extends SubsystemBase {
   public void setFeedWheel(double speed) {
     m_feedWheel.set(speed);
   }
+
+  //Creates a command that can run both feed and launch wheels and set amount of time (Used for autonomous)
+  public Command createLauncherCommand(double feedSpeed, double launchSpeed, double timeout)
+  {
+    return new RunCommand(() -> this.setFeedWheel(feedSpeed), this)
+    .alongWith(new RunCommand(() -> this.setLaunchWheel(launchSpeed), this))
+    .withTimeout(timeout);
+  }     
 
   // A helper method to stop both wheels. You could skip having a method like this and call the
   // individual accessors with speed = 0 instead
