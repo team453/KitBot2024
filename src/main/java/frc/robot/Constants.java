@@ -23,12 +23,12 @@ public final class Constants {
     public static final double kDriverSpeedMultiplier = 0.60;
 
     //Driver Button Mappings
-    public static final int kDriverSpeedButton = 1;
+    //public static final int kDriverSpeedButton = 1;
 
     //Operator Button Mappings
-    public static final int kIntakeButton = 1;
-    public static final int kHighSpeedShootButton = 5;
-    public static final int kLowSpeedShootButton  = 6;
+    public static final int kIntakeButton = 2;
+    public static final int kHighSpeedShootButton = 1;
+    public static final int kLowSpeedShootButton  = 3;
     public static final int kOperatorControlledShootButton = 4;
   }
 

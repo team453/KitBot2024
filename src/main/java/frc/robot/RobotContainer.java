@@ -59,6 +59,7 @@ public class RobotContainer {
             m_drivetrain));
 
     //When holding the trigger, use the driverDriveSpeed
+    /*
     new JoystickButton(m_driver, OperatorConstants.kDriverSpeedButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
     .whileTrue(
         new RunCommand(
@@ -66,18 +67,18 @@ public class RobotContainer {
                 m_drivetrain.arcadeDrive(
                     -m_driver.getY()*DriverDriveSpeed,
                     -m_driver.getTwist()*DriverDriveSpeed),
-            m_drivetrain));
+            m_drivetrain));*/
 
    /*Create an inline sequence to run when the operator presses and holds the appropriate button. Run the PrepareLaunch
      * command for 1 seconds and then run the LaunchNote command */
-    new JoystickButton(m_operator, OperatorConstants.kHighSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    new JoystickButton(m_driver, OperatorConstants.kHighSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
     .whileTrue(
         new PrepareLaunch(m_launcher, kHighLauncherSpeed) // Start with preparing the launch
             .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
             .andThen(new LaunchNote(m_launcher, kHighLauncherSpeed, kHighLaunchFeederSpeed)) // Follow up with launching the note
             .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
 
-    new JoystickButton(m_operator, OperatorConstants.kLowSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+    new JoystickButton(m_driver, OperatorConstants.kLowSpeedShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
     .whileTrue(
         new PrepareLaunch(m_launcher,kLowLauncherSpeed) // Start with preparing the launch
             .withTimeout(LauncherConstants.kLauncherDelay) // Set the timeout for the preparation
@@ -85,7 +86,7 @@ public class RobotContainer {
             .handleInterrupt(() -> m_launcher.stop())); // Handle any interruption by stopping the launcher
 
    //Launch with set speeds
-new JoystickButton(m_operator, OperatorConstants.kOperatorControlledShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
+new JoystickButton(m_driver, OperatorConstants.kOperatorControlledShootButton) // Create a new JoystickButton binding for button 9 on m_driver joystick
 .whileTrue(
      new RunCommand(() -> SmartDashboard.putNumber("running speed", -1 * OperatorLauncherSpeed)) // Print the operator set speed
     .andThen(new PrepareLaunch(m_launcher, -1 * OperatorLauncherSpeed) // Start with preparing the launch
@@ -93,7 +94,7 @@ new JoystickButton(m_operator, OperatorConstants.kOperatorControlledShootButton)
         .andThen(new LaunchNote(m_launcher, -1 * OperatorLauncherSpeed, -1 * OperatorLauncherSpeed)) // Follow up with launching the note
         .handleInterrupt(() -> m_launcher.stop()))); // Handle any interruption by stopping the launcher
 
-    new JoystickButton(m_operator, OperatorConstants.kIntakeButton) // Binding for trigger on m_operatorController joystick
+    new JoystickButton(m_driver, OperatorConstants.kIntakeButton) // Binding for trigger on m_operatorController joystick
     .whileTrue(m_launcher.getIntakeCommand()); // Bind the intake command to be executed while trigger is held
 
   }
